@@ -22,14 +22,88 @@ If you are on `Laravel 5.4` or lower then you will need to register the service 
 ```php
 'providers' => [
     ...
-    \Drp\LaravelJsonApiParser\JsonApiServiceProvider::class,
+    \Drp\LaravelJsonApiParser\JsonApiParserServiceProvider::class,
     ...
 ]
 ``` 
 
 ## Documentation
 
-For documentation on how to use the JSON API parser please visit the [base package's repository](https://github.com/drpdigital/json-api-parser). 
+### How to validate your resources
+When wanting to validate a resource within your payload, you need to give the `JsonApiValidator` a `ValidatorExecutor`.
+This can be done in a few ways specified below. With all of these the first parameter is a string of the type of resource it needs to validate.
+
+So for example if you had a request like:
+
+```json
+{
+  "data": {
+    "id": 1,
+    "type": "user",
+    "attributes": {
+      "name": "Bob"
+    }
+  }
+}
+```
+
+Then your first parameter would be `'user'`.
+
+#### Using `::make`
+
+```php
+$jsonApiValidator = app(JsonApiValidator::class);
+$jsonApiValidator->addValidator(
+    'user', 
+    \Drp\LaravelJsonApiParser\Validation\Validator::make(
+        ['name' => 'required'],
+        ['name.required' => 'You must provide a name']
+    )
+);
+```
+
+The rules and messages you provide are whatever Laravel can support as our validator is just a decorated for Laravel's.
+
+#### Using custom class
+When using a custom validator class you will need to extend our validator class `\Drp\LaravelJsonApiParser\Validation\Validator`. 
+You then specify a `rules` and `messages` function inside the class and return an array of rules and messages in their respective functions.
+
+```php
+<?php
+
+namespace App\Validators;
+
+use Drp\LaravelJsonApiParser\Validation\Validator;
+
+class UserValidator extends Validator
+{
+    public function rules()
+    {
+        return [
+            'name' => 'required',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+           'name.required' => 'Testing Message',
+        ];
+    }
+}
+```
+
+```php
+$jsonApiValidator = app(JsonApiValidator::class);
+$jsonApiValidator->addValidator(
+    'user', 
+    new UserValidator()
+);
+```
+
+### How to resolve your resources into Models
+
+For more documentation on how to use the JSON API parser please visit the [base package's repository](https://github.com/drpdigital/json-api-parser). 
 
 ## Contributing
 Raise any [issues](https://github.com/drpdigital/laravel-json-api-parser/issues) or [feature requests](https://github.com/drpdigital/laravel-json-api-parser/pulls) within GitHub and please follow our guidelines when contributing. 
