@@ -57,7 +57,6 @@ class Validator implements ValidatorExecutor
      */
     public function passes()
     {
-        dd($this->validator);
         return $this->validator->passes();
     }
 
