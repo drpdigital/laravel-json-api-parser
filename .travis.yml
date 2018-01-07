@@ -37,3 +37,6 @@ install:
   - composer update --prefer-source --no-interaction --dev
 
 script: ./vendor/bin/phpunit --configuration phpunit.xml --coverage-clover ./tests/logs/clover.xml
+
+after_success:
+  - travis_retry php vendor/bin/php-coveralls
