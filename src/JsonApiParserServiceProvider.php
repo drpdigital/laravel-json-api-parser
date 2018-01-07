@@ -21,7 +21,19 @@ class JsonApiParserServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(JsonApiParser::class, function ($app) {
-            return new JsonApiParser($app[ResourceResolver::class]);
+            /** @var \Drp\JsonApiParser\ResourceResolver $resolver */
+            $resolver = $app[ResourceResolver::class];
+            $resolver->addCustomParameterResolver(function (\ReflectionParameter $parameter, $id, $type) {
+                $resolved = app('request')->route($type);
+
+                if (is_string($resolved) === false && $parameter->getClass()->isInstance($resolved)) {
+                    return $resolved;
+                }
+
+                return null;
+            });
+
+            return new JsonApiParser($resolver);
         });
 
         $this->app->bind(JsonApiValidator::class, function ($app) {
