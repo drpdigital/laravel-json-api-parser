@@ -15,7 +15,7 @@ class CanValidateResourcesTest extends TestCase
     {
         $validator = $this->app->make(JsonApiValidator::class);
 
-        $validator->addValidator('resource', Validator::make([
+        $validator->validator('resource', Validator::make([
             'test' => 'required'
         ]));
 
@@ -42,7 +42,7 @@ class CanValidateResourcesTest extends TestCase
     {
         $validator = $this->app->make(JsonApiValidator::class);
 
-        $validator->addValidator('resource', new FakeValidator());
+        $validator->validator('resource', new FakeValidator());
 
         try {
             $validator->validate([
@@ -66,7 +66,7 @@ class CanValidateResourcesTest extends TestCase
     {
         $validator = $this->app->make(JsonApiValidator::class);
 
-        $validator->addValidator('resource', new Validator(\Validator::make([], [
+        $validator->validator('resource', new Validator(\Validator::make([], [
             'test' => 'required'
         ], [])));
 
