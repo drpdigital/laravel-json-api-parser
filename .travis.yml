@@ -25,8 +25,6 @@ matrix:
       env: TESTBENCH_VERSION=3.4.*
     - php: 7.1
       env: TESTBENCH_VERSION=3.5.*
-    - php: hhvm
-      env: TESTBENCH_VERSION=3.5.*
     - php: nightly
       env: TESTBENCH_VERSION=3.4.*
     - php: nightly
@@ -38,4 +36,4 @@ before_install:
 install:
   - composer update --prefer-source --no-interaction --dev
 
-script: ./vendor/bin/phpunit --configuration phpunit.xml --coverage-text
+script: ./vendor/bin/phpunit --configuration phpunit.xml --coverage-clover ./tests/logs/clover.xml
