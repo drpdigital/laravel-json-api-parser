@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "drpdigital/json-api-parser": "dev-master",
+        "drpdigital/json-api-parser": "^0.0",
         "illuminate/validation": "5.1.*|5.2.*|5.3.*|5.4.*|5.5.*",
         "illuminate/support": "5.1.*|5.2.*|5.3.*|5.4.*|5.5.*",
         "illuminate/container": "5.1.*|5.2.*|5.3.*|5.4.*|5.5.*"
