@@ -12,7 +12,7 @@ The JSON API parser allows you to read and validate requests that are structured
 ## Version compatibility
 | JSON API Parser version | Laravel Version  | PHP Version |
 | ----------------------- | -----------------| ----------- |
-| 1.X                     | 5.1 - 5.5        | >= 5.6       |
+| 1.X                     | 5.1 - 5.6        | >= 5.6      |
 
 ## Installation
 
@@ -59,7 +59,7 @@ Then your first parameter would be `'user'`.
 
 ```php
 $jsonApiValidator = app(JsonApiValidator::class);
-$jsonApiValidator->addValidator(
+$jsonApiValidator->validator(
     'user',
     \Drp\LaravelJsonApiParser\Validation\Validator::make(
         ['name' => 'required'],
@@ -101,7 +101,7 @@ class UserValidator extends Validator
 
 ```php
 $jsonApiValidator = app(JsonApiValidator::class);
-$jsonApiValidator->addValidator(
+$jsonApiValidator->validator(
     'user',
     new UserValidator()
 );
@@ -111,10 +111,38 @@ $jsonApiValidator->addValidator(
 
 For more documentation on how to use the JSON API parser please visit the [base package's repository](https://github.com/drpdigital/json-api-parser).
 
+### Sample Usage
+
+The request:
+
+```json
+{
+  "data": {
+    "type": "brochure",
+    "attributes": {
+      "title": "My Brochure",
+      "page_size": "A4"
+    }
+  }
+}
+```
+
+The handler:
+
+```php
+public function store(Request $request) : array
+{
+    $collection = json_api()
+        ->resolver('brochure', function (array $data) {
+            return Brochure::create($data);
+        })->parse($request->json()->all());
+}
+```
+
 ## Contributing
 Raise any [issues](https://github.com/drpdigital/laravel-json-api-parser/issues) or [feature requests](https://github.com/drpdigital/laravel-json-api-parser/pulls) within GitHub and please follow our guidelines when contributing.
 
-If you have found a security vulnerbility with the package please email Chris directly at [chris.normansell@drpgroup.com](mailto:chris.normansell@drpgroup.com)
+If you have found a security vulnerability with the package please email Chris directly at [chris.normansell@drpgroup.com](mailto:chris.normansell@drpgroup.com)
 
 ## License
 The Laravel JSON API Parser integration and it's base package are both realted under the [MIT License].
